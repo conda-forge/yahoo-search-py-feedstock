@@ -1,0 +1,48 @@
+schema_version: 1
+
+context:
+  name: yahoo-search-py
+  version: "0.3"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/yahoo-search-py-${{ version }}.tar.gz
+  sha256: 01b5ca2ff117e9e3aca3754c233e49272793cb013de7652f70be48bcddb31772
+
+build:
+  number: 2
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - setuptools >=62.6,<66
+    - setuptools-scm >=6.2,<8
+    - pip
+  run:
+    - python >=${{ python_min }},<3.12
+    - httpx
+    - pydantic
+    - selectolax
+    - urllib3
+
+tests:
+  - python:
+      imports:
+        - yahoo_search
+      pip_check: true
+      python_version: ${{ python_min }}
+
+about:
+  summary: "Search anything on Yahoo: web pages, news, videos, autocomplete, and weather."
+  license: MIT
+  license_file: LICENSE
+  homepage: https://github.com/AWeirdDev/yahoo-search
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
